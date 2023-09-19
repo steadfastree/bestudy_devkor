@@ -54,7 +54,7 @@ export class AppController {
   deleteUserByIndex(@Param('index') index: number, @Res() res: Response) {
     try {
       this.appService.deleteUser(index);
-      res.status(204).send('deleted successfully'); //deleted successfully
+      res.status(200).send('deleted successfully'); //deleted successfully
     } catch (error) {
       res.status(400).send(error.messages);
     }
