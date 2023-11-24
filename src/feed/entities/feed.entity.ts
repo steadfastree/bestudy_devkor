@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-export class Post {
+export class Feed {
   @ApiProperty({ description: '게시글 고유 번호' })
   @PrimaryGeneratedColumn()
   id: number;

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class CreatePostDto {
+export class CreateFeedDto {
   @ApiProperty({ description: '작성 유저 고유 번호' })
   @IsNumber()
   @IsNotEmpty()
