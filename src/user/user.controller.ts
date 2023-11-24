@@ -9,6 +9,8 @@ import {
   Req,
   UseGuards,
   Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Request, Response } from 'express'; //setheader 사용
@@ -20,26 +22,25 @@ import { LoginDto, RegisterDto } from 'src/dto/userauth.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('/register')
   async register(
     @Body() registerUser: RegisterDto, //에러 핸들링이 제대로 안됨.. dto로 타입 체크가 필요.
     @Res() res: Response,
   ) {
     try {
-      res.json(await this.userService.register(registerUser));
+      res.status(201).json(await this.userService.register(registerUser));
     } catch (e) {
-      res.json(e.message);
+      res.json(e);
     }
   }
 
   @Post('/login')
   async login(@Body() loginUser: LoginDto, @Res() res: Response) {
     try {
-      const jwt = await this.userService.login(loginUser);
-      res.json(jwt);
+      res.status(200).json(await this.userService.login(loginUser));
     } catch (e) {
-      console.error(e);
-      res.json(e.message); //리턴값 나중에 수정
+      res.json(e); //리턴값 나중에 수정
     }
   }
   //요청 헤더에 Authorization : Bearer + accessToken 넣어서 보낸다.
@@ -47,7 +48,10 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('/profile')
   async getProfile(@Req() req: Request, @Res() res: Response) {
-    console.log(req.user.id); //Request type에 user가 존재하지 않는다.
-    res.json(await this.userService.getProfile(req.user.id));
+    try {
+      res.status(200).json(await this.userService.getProfile(req.user.id));
+    } catch (e) {
+      res.json(e);
+    }
   }
 }
