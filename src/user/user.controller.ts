@@ -22,7 +22,6 @@ import { LoginDto, RegisterDto } from 'src/dto/userauth.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Post('/register')
   async register(
     @Body() registerUser: RegisterDto, //에러 핸들링이 제대로 안됨.. dto로 타입 체크가 필요.
@@ -40,7 +39,7 @@ export class UserController {
     try {
       res.status(200).json(await this.userService.login(loginUser));
     } catch (e) {
-      res.json(e); //리턴값 나중에 수정
+      res.json(e);
     }
   }
   //요청 헤더에 Authorization : Bearer + accessToken 넣어서 보낸다.
