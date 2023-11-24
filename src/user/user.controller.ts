@@ -23,8 +23,8 @@ import {
 import * as bcrypt from 'bcrypt';
 import { Request, Response } from 'express'; //setheader 사용
 import { AuthGuard } from 'src/auth/auth.guard';
-import { JwtPayloadDto } from 'src/dto/jwt.payload.dto';
-import { LoginDto, RegisterDto } from 'src/dto/userauth.dto';
+import { JwtPayloadDto } from 'src/auth/jwt.payload';
+import { LoginDto, RegisterDto } from 'src/user/dto/user-auth.dto';
 import { ApiOperation, ApiBody } from '@nestjs/swagger';
 
 @Controller('user')
@@ -82,4 +82,4 @@ export class UserController {
       res.json(e);
     }
   }
-}
+} //ApiSecure 추가
