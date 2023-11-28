@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Feed } from 'src/feed/entities/feed.entity';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -19,4 +26,7 @@ export class User {
   @ApiProperty({ description: '회원의 암호화된 비밀번호' })
   @Column()
   password: string;
+
+  @OneToMany(() => Feed, (feed) => feed.user, { cascade: true }) // eager 옵션을 추가하여 연관된 피드를 자동으로 로드하도록 설정
+  feeds: Feed[];
 }
