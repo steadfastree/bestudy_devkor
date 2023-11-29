@@ -11,7 +11,7 @@ export class FeedService {
     @InjectRepository(Feed) private readonly feedRepository: Repository<Feed>,
   ) {}
   async createFeed(userId: number, createFeedDto: CreateFeedDto) {
-    return await this.feedRepository.save({ id: userId, ...CreateFeedDto });
+    return await this.feedRepository.save({ id: userId, ...createFeedDto });
   }
 
   async getFeedList(page: number) {
@@ -26,7 +26,8 @@ export class FeedService {
     const feedDetail = await this.feedRepository.findOneByOrFail({
       id: feedId,
     });
-    return feedDetail;
+    feedDetail.views += 1; //조회수 증가
+    return await this.feedRepository.save(feedDetail);
   }
 
   async updateFeed(

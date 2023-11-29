@@ -41,22 +41,35 @@ export class FeedController {
   @ApiCreatedResponse({ description: '게시글 작성 성공' })
   @Post()
   async createFeed(@Req() req: Request, @Body() createFeedDto: CreateFeedDto) {
-    return this.feedService.createFeed(req.user.id, createFeedDto);
+    try {
+      return this.feedService.createFeed(req.user.id, createFeedDto);
+    } catch (e) {
+      return { status: e.HttpStatus, message: e.message };
+    }
   }
 
   @Get()
   async getFeedList(@Req() req: Request, @Query('page') page: number) {
     //리스트 get으로 수정
-    return this.feedService.getFeedList(page);
+    try {
+      return this.feedService.getFeedList(page);
+    } catch (e) {
+      return { status: e.HttpStatus, message: e.message };
+    }
   }
 
   @ApiOperation({
+    // 요청할때마다 게시글 view increasing 필요
     summary: '게시글 상세 보기',
     description: '해당 id의 게시글 정보 확인',
   })
-  @Get(':id')
-  async getFeedDetail(@Req() req: Request, @Param('id') id: number) {
-    return this.feedService.getFeedDetail(id); //+id는 string을 number로 변환한다는 의미
+  @Get(':feedId')
+  async getFeedDetail(@Req() req: Request, @Param('feedId') feedId: number) {
+    try {
+      return this.feedService.getFeedDetail(feedId);
+    } catch (e) {
+      return { status: e.HttpStatus, message: e.message };
+    }
   }
 
   @ApiOperation({
@@ -69,7 +82,11 @@ export class FeedController {
     @Param('feedId') feedId: number,
     @Body() updateFeedDto: UpdateFeedDto,
   ) {
-    return this.feedService.updateFeed(req.user.id, feedId, updateFeedDto);
+    try {
+      return this.feedService.updateFeed(req.user.id, feedId, updateFeedDto);
+    } catch (e) {
+      return { status: e.HttpStatus, message: e.message };
+    }
   }
 
   @ApiOperation({
@@ -78,6 +95,10 @@ export class FeedController {
   })
   @Delete(':feedId')
   async removeFeed(@Req() req: Request, @Param('feedId') feedId: number) {
-    return this.feedService.removeFeed(req.user.id, feedId);
+    try {
+      return this.feedService.removeFeed(req.user.id, feedId);
+    } catch (e) {
+      return { status: e.HttpStatus, message: e.message };
+    }
   }
 }
