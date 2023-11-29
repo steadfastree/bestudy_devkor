@@ -1,6 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { CreateFeedDto } from './dto/create-feed.dto';
-import { UpdateFeedDto } from './dto/update-feed.dto';
+import { FeedDto } from './dto/feed.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Feed } from './entities/feed.entity';
@@ -10,14 +9,16 @@ export class FeedService {
   constructor(
     @InjectRepository(Feed) private readonly feedRepository: Repository<Feed>,
   ) {}
-  async createFeed(userId: number, createFeedDto: CreateFeedDto) {
-    return await this.feedRepository.save({ id: userId, ...createFeedDto });
+  async createFeed(userId: number, feedDto: FeedDto) {
+    console.log(userId);
+    console.log(feedDto);
+    return await this.feedRepository.save({ userId: userId, ...feedDto });
   }
 
   async getFeedList(page: number) {
     const [feedList, count] = await this.feedRepository.findAndCount({
       take: 10,
-      skip: (page - 1) * 10,
+      skip: (page - 1) * 10, //pagination
     });
     return { feedList, count };
   }
@@ -30,11 +31,7 @@ export class FeedService {
     return await this.feedRepository.save(feedDetail);
   }
 
-  async updateFeed(
-    userId: number,
-    feedId: number,
-    updateFeedDto: UpdateFeedDto,
-  ) {
+  async updateFeed(userId: number, feedId: number, feedDto: FeedDto) {
     const existingFeed = await this.feedRepository.findOneByOrFail({
       id: feedId,
     });
@@ -43,7 +40,7 @@ export class FeedService {
 
     return await this.feedRepository.save({
       ...existingFeed,
-      ...updateFeedDto,
+      ...feedDto,
     });
   }
 

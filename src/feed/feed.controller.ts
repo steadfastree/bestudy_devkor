@@ -11,8 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FeedService } from './feed.service';
-import { CreateFeedDto } from './dto/create-feed.dto';
-import { UpdateFeedDto } from './dto/update-feed.dto';
+import { FeedDto } from './dto/feed.dto';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -40,16 +39,17 @@ export class FeedController {
   })
   @ApiCreatedResponse({ description: '게시글 작성 성공' })
   @Post()
-  async createFeed(@Req() req: Request, @Body() createFeedDto: CreateFeedDto) {
+  async createFeed(@Req() req: Request, @Body() feedDto: FeedDto) {
     try {
-      return this.feedService.createFeed(req.user.id, createFeedDto);
+      console.log(req.user.id);
+      return this.feedService.createFeed(req.user.id, feedDto);
     } catch (e) {
       return { status: e.HttpStatus, message: e.message };
     }
   }
 
   @Get()
-  async getFeedList(@Req() req: Request, @Query('page') page: number) {
+  async getFeedList(@Req() req: Request, @Query('page') page: number = 1) {
     //리스트 get으로 수정
     try {
       return this.feedService.getFeedList(page);
@@ -80,10 +80,10 @@ export class FeedController {
   async updateFeed(
     @Req() req: Request,
     @Param('feedId') feedId: number,
-    @Body() updateFeedDto: UpdateFeedDto,
+    @Body() feedDto: FeedDto,
   ) {
     try {
-      return this.feedService.updateFeed(req.user.id, feedId, updateFeedDto);
+      return this.feedService.updateFeed(req.user.id, feedId, feedDto);
     } catch (e) {
       return { status: e.HttpStatus, message: e.message };
     }

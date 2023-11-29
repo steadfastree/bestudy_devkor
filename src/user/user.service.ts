@@ -26,7 +26,7 @@ export class UserService {
 
     const hashedPW = await bcrypt.hash(password, 10);
 
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({ where: { email: email } });
 
     if (user)
       throw new HttpException('이미 존재하는 유저입니다', HttpStatus.CONFLICT);
@@ -40,9 +40,17 @@ export class UserService {
 
   async login(loginUser: LoginDto) {
     const { email, password } = loginUser;
+    /* if (email == undefined || password == undefined)
+      throw new HttpException(
+        '올바른 입력 값이 아닙니다',
+        HttpStatus.BAD_REQUEST,
+      );*/
 
-    const user = await this.findByEmail(email);
-
+    const user = await this.userRepository.findOneOrFail({
+      // 여기서 email에 undefined가 들어가면 테이블의 첫 번째 값을 출력하는데 왜인지 모르겠음.. 일단 유효성 검사로 일어나지 않게 함.
+      where: { email: email },
+    });
+    console.log(user);
     if (!user)
       throw new HttpException(
         '존재하지 않는 유저입니다',

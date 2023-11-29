@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class CreateFeedDto {
+export class FeedDto {
   /*@ApiProperty({ description: '작성 유저 고유 번호' }) -> req.user.id에서 확인 가능.
   @IsNumber()
   @IsNotEmpty()

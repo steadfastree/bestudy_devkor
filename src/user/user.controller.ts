@@ -40,14 +40,11 @@ export class UserController {
   @ApiCreatedResponse({ description: '회원 가입 성공' })
   @ApiConflictResponse({ description: '이미 존재하는 아이디' })
   @ApiBody({ type: RegisterDto })
-  async register(
-    @Body() registerUser: RegisterDto, //에러 핸들링이 제대로 안됨.. dto로 타입 체크가 필요.
-    @Res() res: Response,
-  ) {
+  async register(@Body() registerUser: RegisterDto) {
     try {
-      res.status(201).json(await this.userService.register(registerUser));
+      return await this.userService.register(registerUser);
     } catch (e) {
-      res.json(e);
+      return { status: e.HttpStatus, message: e.message };
     }
   }
   @ApiOperation({
@@ -58,11 +55,11 @@ export class UserController {
   @ApiBadRequestResponse({ description: '잘못된 아이디나 비밀번호' })
   @ApiBody({ type: LoginDto })
   @Post('/login')
-  async login(@Body() loginUser: LoginDto, @Res() res: Response) {
+  async login(@Body() loginUser: LoginDto) {
     try {
-      res.status(200).json(await this.userService.login(loginUser));
+      return await this.userService.login(loginUser);
     } catch (e) {
-      res.json(e);
+      return { status: e.HttpStatus, message: e.message };
     }
   }
   //요청 헤더에 Authorization : Bearer + accessToken 넣어서 보낸다.
@@ -75,11 +72,11 @@ export class UserController {
   @ApiUnauthorizedResponse({ description: '로그인 필요' })
   @UseGuards(AuthGuard)
   @Get('/profile')
-  async getProfile(@Req() req: Request, @Res() res: Response) {
+  async getProfile(@Req() req: Request) {
     try {
-      res.status(200).json(await this.userService.getProfile(req.user.id));
+      return await this.userService.getProfile(req.user.id);
     } catch (e) {
-      res.json(e);
+      return { status: e.HttpStatus, message: e.message };
     }
   }
 } //ApiSecure 추가
