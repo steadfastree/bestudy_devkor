@@ -14,6 +14,7 @@ import { FeedService } from './feed.service';
 import { FeedDto } from './dto/feed.dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -28,6 +29,7 @@ import { Request } from 'express';
 @ApiBadRequestResponse({ description: '잘못된 값 입력' })
 @ApiUnauthorizedResponse({ description: '로그인 필요' })
 //AuthGuard 삽입
+@ApiBearerAuth('accessToken')
 @UseGuards(AuthGuard)
 @Controller('feed')
 export class FeedController {
@@ -48,6 +50,7 @@ export class FeedController {
     }
   }
 
+  @ApiOperation({ summary: '게시글 목록 조회' })
   @Get()
   async getFeedList(@Req() req: Request, @Query('page') page: number = 1) {
     //리스트 get으로 수정

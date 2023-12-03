@@ -17,6 +17,7 @@ import {
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiBearerAuth,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -64,6 +65,7 @@ export class UserController {
   }
   //요청 헤더에 Authorization : Bearer + accessToken 넣어서 보낸다.
 
+  @ApiBearerAuth('accessToken')
   @ApiOperation({
     summary: '프로필',
     description: '로그인한 유저의 정보',

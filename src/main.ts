@@ -10,6 +10,16 @@ async function bootstrap() {
     .setTitle('DevKor BEstudy')
     .setDescription('Swagger Example of DevKor BEstudy')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'JWT',
+        description: 'Jwt token',
+        in: 'header',
+      },
+      'accessToken',
+    )
     .build();
 
   app.useGlobalPipes(new ValidationPipe());
